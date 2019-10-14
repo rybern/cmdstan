@@ -47,6 +47,11 @@ ifneq ($(notdir $(shell where tbb.dll)),tbb.dll)
 	@echo ''
 	@echo '--- Translating Stan model to C++ code ---'
 	$(WINE) bin/stanc$(EXE) $(STANCFLAGS) --o=$(subst  \,/,$@) $(subst  \,/,$<)
+else
+%.hpp : %.stan bin/stanc$(EXE)
+	@echo ''
+	@echo '--- Translating Stan model to C++ code ---'
+	$(WINE) bin/stanc$(EXE) $(STANCFLAGS) --o=$(subst  \,/,$@) $(subst  \,/,$<)
 endif
 else
 %.hpp : %.stan bin/stanc$(EXE)
