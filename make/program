@@ -31,16 +31,19 @@ ifdef STAN_OPENCL
 STANCFLAGS+= --use-opencl
 endif
 
-%/tbb.dll : $(TBB_TARGETS)
+%/tbb-lib : $(TBB_TARGETS)
 	@echo 'Intel TBB is not in PATH. Consider calling '
 	@echo 'make install-tbb'
+	@touch $@
 	cp -v $(TBB_TARGETS) $*
+
+.PRECIOUS: %/tbb-lib
 
 # On Windows we optionally fold the tbb.dll into the dependency
 ifeq ($(OS),Windows_NT)
 ifneq ($(notdir $(shell where tbb.dll)),tbb.dll)
 .SECONDEXPANSION:
-%.hpp : %.stan bin/stanc$(EXE) $$(dir %)tbb.dll
+%.hpp : %.stan bin/stanc$(EXE) $$(dir %)tbb-lib
 	@echo ''
 	@echo '--- Translating Stan model to C++ code ---'
 	$(WINE) bin/stanc$(EXE) $(STANCFLAGS) --o=$(subst  \,/,$@) $(subst  \,/,$<)
