@@ -4,9 +4,6 @@
 # emacs backup files
 *~
 
-# built tools
-/bin/
-
 # built tests
 /test/
 
